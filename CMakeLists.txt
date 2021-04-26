@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.12)
 
 project(nanopb C)
 
-set(nanopb_VERSION_STRING nanopb-0.4.6-dev)
+set(nanopb_VERSION_STRING nanopb-0.4.5)
 set(nanopb_SOVERSION 0)
 
 string(REPLACE "nanopb-" "" nanopb_VERSION ${nanopb_VERSION_STRING})
@@ -38,16 +38,16 @@ if(NOT DEFINED CMAKE_INSTALL_CMAKEDIR)
     set(CMAKE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/nanopb")
 endif()
 
-find_package(Python REQUIRED)
-execute_process(
-    COMMAND ${Python_EXECUTABLE} -c
-        "from distutils import sysconfig; print(sysconfig.get_python_lib(prefix=''))"
-    OUTPUT_VARIABLE PYTHON_INSTDIR
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
 if(nanopb_BUILD_GENERATOR)
     set(generator_protos nanopb)
+
+    find_package(Python REQUIRED)
+    execute_process(
+        COMMAND ${Python_EXECUTABLE} -c
+            "from distutils import sysconfig; print(sysconfig.get_python_lib(prefix=''))"
+        OUTPUT_VARIABLE PYTHON_INSTDIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
 
     foreach(generator_proto IN LISTS generator_protos)
         string(REGEX REPLACE "([^;]+)" "${PROJECT_SOURCE_DIR}/generator/proto/\\1.proto" generator_proto_file "${generator_proto}")
